@@ -188,35 +188,45 @@ const efoundersCommandLines = (command, args) => {
 };
 
 const shrugCommandLines = () => (['¯\\_(ツ)_/¯']);
-
-const emptyCommandLines = () => ([]);
-
+const emptyCommandLines = () => (['']);
+const notFoundCD = (command) => ([`bash: ${command}: No such file or directory`]);
 const notFoundCommandLines = (program) => ([`bash: ${program}: command not found`]);
+
 
 const parseCommand = (command) => {
   const [program, ...args] = command.split(' ');
+  let bootReply = [`efounders.co:website hacker$ ${command}`];
   switch (program) {
+    case '': break;
     case 'efounders': {
-      return efoundersCommandLines(command, args);
+      bootReply.push(...efoundersCommandLines(command, args));
+      break;
+    }
+    case 'clear': {
+      bootReply = emptyCommandLines();
+      break;
     }
     case 'shrug': {
-      return shrugCommandLines();
-    }
-    case '': {
-      return emptyCommandLines();
+      bootReply.push(...shrugCommandLines());
+      break;
     }
     default: {
-      return notFoundCommandLines(program);
+        if(command.indexOf("cd") !== -1) {
+          bootReply = (command.length > 2) ? notFoundCD(command) : bootReply;
+        } else {
+          bootReply.push(...notFoundCommandLines(program));
+        }
     }
   }
+
+  return bootReply;
+
 };
 
 const executeCommand = (command) => ({
   type: 'EXECUTE_COMMAND',
-  lines: [
-    `efounders.co:website hacker$ ${command}`,
-    ...parseCommand(command),
-  ],
+  lines: parseCommand(command),
+  command: command
 });
 
 const caretLeft = () => ({ type: 'CARET_LEFT' });
