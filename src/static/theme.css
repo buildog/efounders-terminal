@@ -20,7 +20,8 @@
     -ms-flex: 1 1 auto;
     flex: 1 1 auto;
     -ms-flex-direction: column;
-    flex-direction: column
+    flex-direction: column;
+    min-height: 1px; /* By default, flex items won’t shrink below their minimum content size */
 }
 
 .l-console__header {
