@@ -30,6 +30,8 @@ export default {
       test: /\.js$/,
       loader: 'babel',
       include: path.join(__dirname, 'src'),
+    }, {
+      test: /\.css$/, loader: "style-loader!css-loader"
     }],
   },
   devServer: {
